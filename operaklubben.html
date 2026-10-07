@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>OperaKlubben</title>
+<style>
+:root{color-scheme:dark;--gold:#d6b779;--ink:#e5dfd4}*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:#000;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1000px;margin:auto;background:#000}.hero{margin:24px auto 0;position:relative;background:#000;overflow:hidden;width:100%;max-width:620px;aspect-ratio:1/1}.hero img{display:block;width:100%;height:100%;object-fit:contain}.placeholder{height:100%;display:grid;place-content:center;text-align:center;color:var(--gold);background:#000;padding:24px}.placeholder span{font:italic clamp(28px,6vw,48px)/1.3 Georgia,serif}.placeholder small{margin-top:18px;color:#938570;font-size:13px;letter-spacing:.08em}.content{max-width:740px;margin:auto;padding:38px 42px 80px}h1{font:normal clamp(42px,7vw,70px)/1.15 Georgia,"Times New Roman",serif;letter-spacing:-.035em;color:var(--gold);margin:0 0 38px;text-align:center}h1:after{content:"";display:block;width:88px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:28px auto 0}p{font-size:18px;font-weight:300;line-height:1.85;margin:0 0 25px}.closing{font:italic 27px/1.55 Georgia,serif;color:var(--gold);text-align:center;margin:38px 0 44px}.actions{display:grid;gap:15px}button{width:100%;min-height:62px;padding:18px 20px;border:1px solid #8a7047;border-radius:3px;background:#000;color:var(--gold);font:500 16px/1.4 system-ui,sans-serif;letter-spacing:.025em;cursor:pointer;touch-action:manipulation}.actions button:first-child{background:linear-gradient(110deg,#b99657,#ecd7a4,#c1a064);color:#171109;border-color:#dfc48c}button:hover{background:#19140c;border-color:var(--gold)}.actions button:first-child:hover{background:#ecd7a4}button:focus-visible{outline:2px solid #f6dfac;outline-offset:5px}dialog{max-width:480px;width:calc(100% - 32px);max-height:calc(100dvh - 48px);overflow:auto;border:1px solid #a68a55;border-radius:4px;padding:32px;background:#000;color:var(--ink);box-shadow:0 20px 100px #000}dialog::backdrop{background:#000c;backdrop-filter:blur(5px)}dialog h2{font:normal 30px/1.3 Georgia,serif;color:var(--gold);margin:0 0 20px}dialog p{font-size:17px}dialog iframe{display:block;width:100%;height: min(480px,55dvh);border:0;background:#000}dialog button{margin-top:10px}body:has(dialog[open]){overflow:hidden}@media(max-width:600px){.hero{width:calc(100% - 32px);margin-top:20px;aspect-ratio:1/1}.content{padding:25px 24px 52px}h1{margin-bottom:30px}p{font-size:17px;line-height:1.8}.closing{font-size:24px;margin:32px 0 36px}.actions{gap:14px}button{min-height:62px}dialog{padding:26px}}@media(prefers-reduced-motion:no-preference){button{transition:background .18s ease,border-color .18s ease}}
+.action-link{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;width:100%;min-height:62px;padding:18px 20px;border:1px solid #8a7047;border-radius:3px;background:#000;color:var(--gold);font:500 16px/1.4 system-ui,sans-serif;letter-spacing:.025em;touch-action:manipulation}.action-link:hover{background:#19140c;border-color:var(--gold)}.action-link:focus-visible{outline:2px solid #f6dfac;outline-offset:5px}
+.site-menu{position:fixed;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:5}
+.menu-toggle{width:48px;min-height:48px;padding:12px;display:grid;place-items:center;border-radius:6px;background:#000}
+.menu-toggle svg{width:24px;height:24px}
+.menu-links{max-height:calc(100dvh - 80px);overflow-y:auto;overscroll-behavior:contain;position:absolute;right:0;top:56px;width:min(280px,calc(100vw - 24px));padding:8px;background:#100e0a;border:1px solid #8a7047;border-radius:6px;box-shadow:0 12px 30px #000b}
+.menu-links a{display:block;padding:16px 12px;color:var(--gold);text-decoration:none;font-size:16px;border-radius:3px}
+.menu-links a:hover,.menu-links a:focus-visible{background:#292116;outline:2px solid var(--gold)}
+dialog.opera-essay{width:calc(100% - 24px);max-width:700px;height:min(820px,calc(100dvh - 24px));max-height:calc(100dvh - 24px);padding:0;overflow:hidden;border-radius:10px}
+.essay-bar{height:60px;display:flex;justify-content:flex-end;align-items:center;padding:6px 10px;border-bottom:1px solid #493d29;background:#100e0a}
+.essay-close{margin:0;width:48px;min-height:48px;padding:8px;display:grid;place-items:center;border:0;border-radius:5px;background:transparent}
+.essay-close:hover{background:transparent}
+.essay-close svg{display:block;width:24px;height:24px;transform-origin:center}
+@media(hover:hover) and (pointer:fine){.essay-close:hover{background:#e4e4e4;color:#171109}}
+@media(prefers-reduced-motion:no-preference){.essay-close{transition:background .22s ease,color .22s ease}.essay-close svg{transition:transform .28s cubic-bezier(.2,.8,.2,1)}}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.essay-close:hover svg{animation:close-turn .55s ease-in-out}@keyframes close-turn{0%,100%{transform:rotate(0deg)}50%{transform:rotate(45deg)}}}
+.essay-scroll{height:calc(100% - 60px);overflow-y:auto;overscroll-behavior:contain;padding:24px clamp(20px,5vw,42px) 32px;scrollbar-color:#8a7047 #100e0a}
+.essay-scroll h2{text-align:center;font-size:clamp(28px,6vw,36px);line-height:1.25;margin-bottom:26px}
+.essay-scroll p{font-size:17px;line-height:1.8;font-weight:300;overflow-wrap:break-word}
+
+.essay-image{display:block;width:85%;height:auto;margin:0 auto 26px;border-radius:4px}
+
+.opera-name{color:var(--gold);text-align:center;font:normal clamp(24px,6vw,32px)/1.3 Georgia,serif;margin:0 0 20px}
+.booking-intro{text-align:center;margin-bottom:22px}.essay-scroll .booking-date{padding:22px 16px;margin:0 0 24px;border:1px solid #8a7047;border-radius:6px;background:linear-gradient(120deg,#21190d,#100d08);color:var(--gold);text-align:center;font:normal clamp(24px,6vw,32px)/1.45 Georgia,serif;text-wrap:balance}
+
+.content{padding-top:18px}.closing{margin-top:12px}@media(max-width:600px){.content{padding-top:12px}.closing{margin-top:10px}}
+
+.scroll-hint{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:4;width:48px;min-height:48px;padding:10px;border-radius:50%;background:#100e0af2;box-shadow:0 3px 18px #0009}
+.scroll-hint svg{display:block;width:26px;height:26px;margin:auto}
+body:has(dialog[open]) .scroll-hint{display:none}
+@media(prefers-reduced-motion:no-preference){.scroll-hint svg{animation:scroll-nudge 1.6s ease-in-out infinite}@keyframes scroll-nudge{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}}
+
+.first-screen{height:100vh;height:100svh;height:100dvh;display:flex;flex-direction:column;align-items:center;padding: max(64px,calc(env(safe-area-inset-top) + 52px)) 20px calc(80px + env(safe-area-inset-bottom));gap:15px;overflow:hidden}
+.first-screen h1{flex:none;font-size:clamp(28px,6dvh,48px);line-height:1.1;margin:0;text-align:center}
+.first-screen h1:after{display:none}
+.first-screen .hero{
+  flex:none;
+  width:min(100%,495px,calc((100dvh - 320px)*1.149425));
+  max-width:495px;
+  aspect-ratio:1/.87;
+  margin:0;
+  overflow:hidden;
+}
+.first-screen .hero img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  transform:translateY(-8%);
+}
+.first-screen .closing{flex:none;margin:0;font-size:clamp(17px,3.1dvh,27px);line-height:1.3;text-align:center}
+.content{padding-top:24px}
+.scroll-hint{bottom:calc(16px + env(safe-area-inset-bottom))}
+@media(orientation:landscape) and (max-height:500px){.first-screen{padding-top:14px;padding-bottom:70px;gap:6px}.first-screen h1{font-size:26px}.first-screen .hero{width:min(100%,495px,calc((100dvh - 230px)*1.149425))}.first-screen .closing{font-size:16px;line-height:1.15}}
+
+.opera-meta{margin:20px 0 24px;display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
+.opera-meta dt{color:var(--gold)}.opera-meta dd{margin:0;overflow-wrap:anywhere}
+.opera-section{margin:24px 0}.opera-section h3{margin:0 0 12px;color:var(--gold);font:normal 24px/1.3 Georgia,serif}
+.opera-synopsis{white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:1.8;margin:0}
+.spotify-highlight{margin:0 0 16px}
+.spotify-title{margin:0 0 8px;color:var(--gold);font:500 17px/1.5 system-ui,sans-serif}
+.spotify-highlight iframe{width:100%;height:152px;border:0;border-radius:12px;margin:0;background:#111}
+.spotify-highlight a{display:inline-block;margin-top:6px;color:var(--gold);font-size:14px;text-underline-offset:3px}
+.opera-status{margin:20px 0;color:var(--ink)}
+.opera-tickets{margin:24px 0 16px}
+@media(max-width:420px){.opera-meta{grid-template-columns:1fr;gap:4px}.opera-meta dd{margin-bottom:10px}}
+
+.content{scroll-margin-top:76px}
+.actions-intro{margin:0 0 28px;text-align:center}
+.actions-intro h2{margin:0 0 10px;color:var(--gold);font:normal clamp(24px,5vw,30px)/1.35 Georgia,serif}
+.actions-intro p{margin:0;font-size:17px;line-height:1.7}
+.main-dialog-scroll{display:flex;flex-direction:column;min-height:0}
+.main-dialog-scroll>h2,.main-dialog-scroll>p,#opera-booking{flex-shrink:0}
+#dialog-app{flex:1;min-height:0;height:auto}
+</style>
+</head>
+<body>
+<nav class="site-menu" aria-label="Meny">
+<button class="menu-toggle" id="menu-toggle" type="button" aria-label="Öppna meny" aria-expanded="false" aria-controls="menu-links"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 5h18M3 12h18M3 19h18"/></svg></button>
+<div class="menu-links" id="menu-links" hidden>
+<a href="#about-club" id="about-club-link">Vad är OperaKlubben?</a>
+<a href="#how-to" id="how-to-link">Hur gör jag?</a>
+<a href="#why-early" id="why-early-link">Varför så tidigt ute?</a>
+<a href="#before-opera" id="before-opera-link">Vad händer före föreställningen?</a>
+<a href="#why-opera" id="why-opera-link">Varför lyssna på opera?</a>
+</div>
+</nav>
+<main>
+<section class="first-screen" aria-labelledby="title">
+<h1 id="title">OperaKlubben</h1>
+<figure class="hero" aria-label="OperaKlubbens bild">
+<img src="opera-start.jpg" alt="OperaKlubben">
+</figure>
+
+
+<p class="closing">Lite flärd,<br>stor musik<br>och en fin kväll<br>tillsammans</p>
+</section>
+<section class="content" aria-label="Bokning och deltagare">
+<div class="actions-intro">
+<h2>Vad handlar detta om? Hur gör jag?</h2>
+<p>Du hittar all information i sidomenyn.</p>
+</div>
+<div class="actions" aria-label="OperaKlubbens val">
+<button type="button" data-panel="opera">Vald opera</button>
+<button type="button" data-panel="join">Haka på!</button>
+<button type="button" data-panel="guests">Se vilka som ska med</button>
+</div>
+</section>
+</main>
+<button type="button" class="scroll-hint" id="scroll-hint" aria-label="Skrolla till knapparna längre ner" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 9 7 7 7-7"/></svg></button>
+<dialog class="opera-essay" id="main-dialog" aria-labelledby="dialog-title">
+<div class="essay-bar"><button type="button" class="essay-close" id="close-dialog" aria-label="Stäng" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+<div class="essay-scroll main-dialog-scroll" tabindex="0">
+<h2 id="dialog-title"></h2>
+<p id="dialog-text"></p>
+<div id="opera-booking" hidden><p class="booking-intro" hidden>Notera dag och tid!</p><p class="booking-date" hidden></p><div id="opera-content" aria-live="polite"></div></div>
+<iframe id="dialog-app" title="OperaKlubbens anmälan" hidden></iframe>
+</div>
+</dialog>
+<iframe id="opera-data" title="Uppgifter om aktuell opera" hidden></iframe>
+<dialog class="opera-essay" id="why-opera" aria-labelledby="essay-title"><div class="essay-bar"><button type="button" class="essay-close" id="essay-close" aria-label="Stäng" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><article class="essay-scroll" tabindex="0"><h2 id="essay-title">Varför ska man lyssna på opera?</h2><img class="essay-image" src="opera-why-listen.jpg" alt=""><p>Den vanligaste frågan när man nämner opera är nästan alltid:</p><p>– Vad handlar den om?</p><p>En rimlig fråga. Men också lite fel fråga. Visst har operor en handling. Människor blir kära, bedrar varandra, klär ut sig, gifter sig med fel person, hugger ihjäl varandra, förgiftar sig, kastar sig från borgmurar och dör av tuberkulos. Ibland hinner de med förvånansvärt mycket under en och samma kväll. Men om det framför allt är intrigen du är ute efter finns det effektivare underhållning. Till och med en tv-serie som gått i 72 säsonger har ofta bättre driv. Ändå är det bra att känna till handlingen. Jag återkommer till varför.</p><p>I opera är handlingen ofta ramen som håller allting samman – ungefär som snöret i ett pärlhalsband. Man behöver snöret, men det är knappast därför man köper halsbandet. Det är pärlorna man vill åt. Och pärlorna är känslorna. Det här gäller särskilt den klassiska operatraditionen hos tonsättare som Mozart, Rossini, Donizetti, Verdi och Puccini. Alla operor fungerar inte på exakt samma sätt, men hos dessa kompositörer blir principen särskilt tydlig.</p><p>Först måste förstås något hända. Någon får höra att hans hustru är otrogen. Någon ska dra ut i krig. Två ungdomar från rivaliserande familjer möts en sommarkväll. Och sedan händer något märkligt. Någon ljuger, någon avslöjas, någon blir svartsjuk, någon förälskar sig, någon inser att allt är förlorat. Tiden stannar. Då kommer arian – ett större sångnummer där en människa får stanna kvar i just den känsla hon befinner sig i och låta musiken förstora den.</p><p>I Puccinis <em>La Bohème</em> träffar den fattige poeten Rodolfo den blyga sömmerskan Mimì. De letar efter en borttappad nyckel i mörkret, deras händer möts – och plötsligt har något så trivialt blivit början på en kärlekshistoria. Men Mimì är dödligt sjuk och Rodolfo är för fattig för att kunna ge henne den trygghet och vård hon behöver. I Mozarts <em>Trollflöjten</em> kräver Nattens drottning att hennes dotter ska mörda Sarastro och hennes raseri exploderar i halsbrytande koloraturer där rösten nästan förvandlas till ett vapen. I Verdis <em>Otello</em> hör vi svartsjukan steg för steg äta upp en människa. Och i Donizettis <em>Lucia di Lammermoor</em> förvandlas ett psykiskt sammanbrott till en märkligt vacker galenskapsscen där rösten tycks lämna verkligheten.</p><p>Men opera är förstås inte bara död, vansinne och mord. Den kan också vara ren glädje. I Mozarts <em>Figaros bröllop</em> springer Cherubino omkring och är förälskad i ungefär alla kvinnor han ser. Han fryser, brinner, suckar och begriper ingenting. Det är puberteten, satt till musik. Och i <em>Trollflöjten</em> har vi Papageno, som inte är särskilt intresserad av visdom, makt eller högre andliga ideal. Han vill mest ha något gott att äta, något gott att dricka och någon att älska. När han till sist hittar sin Papagena spricker allting upp i en jublande duett om kärlek, barn och en högst jordnära framtid. Det är lycka utan krusiduller – och Mozart gör den fullkomligt oemotståndlig. Och ibland blir allt enormt. Hos Verdi kan scenen fyllas av kör, trumpeter, soldater, präster och processioner. Hos Mozart kan flera människor sjunga samtidigt och känna helt olika saker: en är rasande, en annan förskräckt, en tredje förälskad och en fjärde försöker febrilt dölja vad han just har gjort. Det som i verkligheten skulle vara ett kaotiskt gräl blir plötsligt perfekt ordnad musik.</p><p>Och det är här vi kommer tillbaka till handlingen. För det är faktiskt klokt att känna till den i förväg. Då slipper du sitta under föreställningen och försöka reda ut vem som är gift med vem, varför någon plötsligt är utklädd till soldat och varför mannen med svärdet är så förbannad på tenoren. Du vet redan vad som händer. Då kan du i stället lyssna på vad människorna känner. Det är där operan finns. Mozart, Rossini, Donizetti, Verdi, Puccini och de andra tar kärlek, vrede, sorg, svartsjuka, rädsla, längtan och begär och skruvar upp dem tills känslan nästan blir större än människan som bär den.</p><p>Så nästa gång någon frågar:</p><p>– Vad handlar operan om?</p><p>kan svaret gärna vara:</p><p>– Det spelar mindre roll. Poängen är vad den får oss att känna.</p></article></dialog>
+<dialog class="opera-essay" id="about-club" aria-labelledby="about-title"><div class="essay-bar"><button type="button" class="essay-close" id="about-close" aria-label="Stäng" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><article class="essay-scroll" tabindex="0"><h2 id="about-title">Vad är OperaKlubben?</h2><img class="essay-image" src="opera-what-is.jpg" alt=""><p>En gång om året – när höstlöven faller – väljer Dragana och jag ut en riktigt bra opera som spelas en lämplig lördag den kommande våren i Öresundsregionen. När valet är klart meddelar vi våra vänner och de som vill följa med hakar på.</p><p>Tanken är enkel! Vi klär upp oss lite, vi ses en stund innan, äter en bit mat eller nöjer oss kanske med ett glas bubbel i foajén. En minnesregel: Dragana och jag vill alltid både äta och bubbla! Alla bokar och betalar förstås själva. Den här sidan handlar om (1) utvald opera, (2) utvald restaurang och (3) vilka vi blir!</p><p>Ungefär en månad i förväg synkar vi vilka som tänker äta på utvald restaurang – för då ska vi givetvis sitta tillsammans!</p><p>OperaKlubben är helt enkelt en chans att komma iväg på det där lilla extra som man så ofta tänker att man borde göra – men som lätt aldrig blir av. Knepet är att vi gör det tillsammans med lite fokus på att också ses en stund innan föreställningen börjar.</p><p>Du anmäler såklart samtliga "de dina" som vill följa med – din käresta, din "bättre hälft", kanske en god vän eller en son/dotter som vill haka på.</p></article></dialog>
+<dialog class="opera-essay" id="how-to" aria-labelledby="how-to-title">
+<div class="essay-bar"><button type="button" class="essay-close" aria-label="Stäng" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+<article class="essay-scroll" tabindex="0">
+<h2 id="how-to-title">Hur gör jag?</h2>
+<img class="essay-image" src="opera-score.jpg" alt="" loading="lazy" decoding="async">
+<p>Börja med att klicka på ”Vald opera…” på huvudsidan. Där hittar du information om föreställningen, handlingen och musik att lyssna på.</p>
+<p>Vill du följa med? Klicka på ”Boka biljetter” i operarutan och köp dina biljetter. Alla bokar och betalar själva. Anmäl sedan dig och ditt sällskap via ”Haka på!”. Ange namn och e-postadress för varje person. Om ni går tillsammans, kan ni välja att använda samma e-postadress.</p>
+<p><strong>Anmälan till OperaKlubben är ingen biljettbokning.</strong> Den talar om för oss vilka som ska med, så att vi kan hålla kontakten inför kvällen. Under ”Se vilka som ska med” hittar du deltagarlistan.</p>
+</article>
+</dialog>
+<dialog class="opera-essay" id="why-early" aria-labelledby="why-early-title">
+<div class="essay-bar"><button type="button" class="essay-close" aria-label="Stäng" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+<article class="essay-scroll" tabindex="0">
+<h2 id="why-early-title">Varför så tidigt ute?</h2>
+<img class="essay-image" src="opera-violin.jpg" alt="" loading="lazy" decoding="async">
+<p>Operabiljetter kan gå åt väldigt fort. Det är inte ovanligt att en föreställning som ligger ett halvår fram i tiden redan har status ”Fåtal biljetter kvar”.</p>
+<p>Därför väljer vi opera och bjuder in i god tid. Vill du följa med är det klokt att boka dina biljetter så snart du har bestämt dig.</p>
+</article>
+</dialog>
+<dialog class="opera-essay" id="before-opera" aria-labelledby="before-opera-title">
+<div class="essay-bar"><button type="button" class="essay-close" aria-label="Stäng" autofocus><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+<article class="essay-scroll" tabindex="0">
+<h2 id="before-opera-title">Vad händer före föreställningen?</h2>
+<img class="essay-image" src="opera-harp.jpg" alt="" loading="lazy" decoding="async">
+<p>Vi ses gärna en stund innan föreställningen börjar – för en middag tillsammans eller kanske bara ett glas bubbel i foajén.</p>
+<p>Det är frivilligt och du väljer själv vad du vill vara med på. Dragana och jag vill förstås både äta och bubbla!</p>
+<p>Ungefär en månad före föreställningen hör vi av oss och synkar vilka som vill göra vad. De som vill äta tillsammans samordnar vi, så att vi kan sitta tillsammans på restaurangen.</p>
+</article>
+</dialog>
+<script>
+const appUrl='https://script.google.com/macros/s/AKfycbz9dp-aRFtRGDj0m0nkgD5rGC2IRL_Y30amoeIzUE23ZaebzU0xzcCm3fACoPePxTR6/exec';
+const titles={opera:'Vald opera',join:'Jag hakar på!',guests:'Anmälda'};
+const modal=document.querySelector('dialog');
+const frame=document.getElementById('dialog-app');
+const message=document.getElementById('dialog-text');
+const operaContent=document.getElementById('opera-content');
+const operaLoader=document.getElementById('opera-data');
+const operaButton=document.querySelector('[data-panel="opera"]');
+let aktuellOpera=null;
+let operaHarSvar=false;
+let operaHamtar=false;
+let operaRequest=0;
+let operaLoadTimer;
+function operaStatus(text){
+  operaContent.replaceChildren();
+  const status=document.createElement('p');
+  status.className='opera-status';
+  status.setAttribute('role','status');
+  status.textContent=text;
+  operaContent.appendChild(status);
+}
+function laddaOpera(){
+  clearTimeout(operaLoadTimer);
+  if(!operaHarSvar)operaStatus('Hämtar information om operan …');
+  operaHamtar=true;
+  operaLoader.src=appUrl+'?vy=opera&request='+String(++operaRequest);
+  operaLoadTimer=setTimeout(()=>{
+    operaHamtar=false;
+    if(modal.open && modal.dataset.panel==='opera')operaFel();
+  },20000);
+}
+function operaFel(){
+  operaHamtar=false;
+  clearTimeout(operaLoadTimer);
+  operaStatus('Informationen om operan kunde inte hämtas just nu.');
+  const retry=document.createElement('button');
+  retry.type='button';
+  retry.textContent='Försök igen';
+  retry.addEventListener('click',laddaOpera);
+  operaContent.appendChild(retry);
+}
+function spotifyInfo(text){
+  if(typeof text!=='string')return null;
+  let typ,id;
+  const uri=text.trim().match(/^spotify:(track|album|playlist):([A-Za-z0-9]{22})$/);
+  if(uri){typ=uri[1];id=uri[2]}else{
+    try{
+      const url=new URL(text.trim());
+      if(url.protocol!=='https:' || url.hostname!=='open.spotify.com')return null;
+      const delar=url.pathname.split('/').filter(Boolean);
+      if(delar[0] && delar[0].startsWith('intl-'))delar.shift();
+      if(delar[0]==='embed')delar.shift();
+      if(delar.length!==2 || !['track','album','playlist'].includes(delar[0]) || !/^[A-Za-z0-9]{22}$/.test(delar[1]))return null;
+      typ=delar[0];id=delar[1];
+    }catch{return null}
+  }
+  return {typ:typ,url:'https://open.spotify.com/'+typ+'/'+id,embed:'https://open.spotify.com/embed/'+typ+'/'+id+'?theme=0'};
+}
+function biljettUrl(text){
+  if(typeof text!=='string')return null;
+  try{
+    const url=new URL(text.trim());
+    return url.protocol==='https:' && !url.username && !url.password?url.href:null;
+  }catch{return null}
+}
+function forestallningstid(info){
+  if(!info)return '';
+  let dag='';
+  const match=typeof info.datum==='string' && info.datum.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(match){
+    const [,ar,manad,datum]=match.map(Number);
+    const date=new Date(Date.UTC(ar,manad-1,datum));
+    if(date.getUTCFullYear()===ar && date.getUTCMonth()===manad-1 && date.getUTCDate()===datum){
+      const delar=new Intl.DateTimeFormat('sv-SE',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).formatToParts(date);
+      const del=typ=>delar.find(item=>item.type===typ).value;
+      const veckodag=del('weekday');
+      dag=veckodag[0].toUpperCase()+veckodag.slice(1)+' den '+del('day')+' '+del('month')+' '+del('year');
+    }
+  }
+  const tid=typeof info.starttid==='string' && info.starttid.trim().match(/^([01]\d|2[0-3]):([0-5]\d)(?::00)?$/);
+  return dag+(tid?(dag?' klockan ':'Klockan ')+tid[1]+'.'+tid[2]:'');
+}
+function uppdateraOperaMetadata(info){
+  const sasong=info && typeof info.arstidOchAr==='string'?info.arstidOchAr.trim():'';
+  operaButton.textContent='Vald opera'+(sasong?' '+sasong:'');
+  titles.opera=sasong?'Opera '+sasong:'Vald opera';
+  if(modal.open && modal.dataset.panel==='opera')document.getElementById('dialog-title').textContent=titles.opera;
+}
+function visaOpera(info){
+  document.getElementById('dialog-title').textContent=titles.opera;
+  const tid=forestallningstid(info);
+  const datumruta=document.querySelector('.booking-date');
+  datumruta.textContent=tid;
+  datumruta.hidden=!tid;
+  document.querySelector('.booking-intro').hidden=!tid;
+  clearTimeout(operaLoadTimer);
+  if(!info || typeof info.opera!=='string' || !info.opera.trim()){
+    operaStatus('Information om den valda operan publiceras snart.');
+    return;
+  }
+  operaContent.replaceChildren();
+  const operanamn=document.createElement('h3');
+  operanamn.className='opera-name';
+  operanamn.textContent=info.opera;
+  operaContent.appendChild(operanamn);
+  const meta=document.createElement('dl');
+  meta.className='opera-meta';
+  [['Kompositör',info.kompositor],['Visas på',info.visasPa]].forEach(([label,value])=>{
+    if(typeof value!=='string' || !value.trim())return;
+    const term=document.createElement('dt');term.textContent=label;
+    const beskrivning=document.createElement('dd');beskrivning.textContent=value;
+    meta.append(term,beskrivning);
+  });
+  if(meta.children.length)operaContent.appendChild(meta);
+  if(typeof info.handling==='string' && info.handling.trim()){
+    const section=document.createElement('section');section.className='opera-section';
+    const heading=document.createElement('h3');heading.textContent='Handling i korthet';
+    const text=document.createElement('p');text.className='opera-synopsis';text.textContent=info.handling;
+    section.append(heading,text);operaContent.appendChild(section);
+  }
+  const highlights=(Array.isArray(info.highlights)?info.highlights:[]).slice(0,5).map(item=>{
+    const spor=spotifyInfo(typeof item==='string'?item:item && item.url);
+    return spor?{...spor,titel:item && typeof item.titel==='string'?item.titel.trim():''}:null;
+  }).filter(Boolean);
+  if(highlights.length){
+    const section=document.createElement('section');section.className='opera-section';
+    const heading=document.createElement('h3');heading.textContent='Highlights';section.appendChild(heading);
+    highlights.forEach((spor,index)=>{
+      const kort=document.createElement('div');kort.className='spotify-highlight';
+      if(spor.titel){
+        const titel=document.createElement('h4');titel.className='spotify-title';titel.textContent=spor.titel;
+        kort.appendChild(titel);
+      }
+      const player=document.createElement('iframe');
+      player.src=spor.embed;
+      player.title=spor.titel?'Spotify – '+spor.titel:'Spotify – lyssningsexempel '+(index+1)+' ur '+info.opera;
+      player.style.height=spor.typ==='track'?'152px':'352px';
+      player.setAttribute('allow','autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture');
+      player.setAttribute('allowfullscreen','');
+      player.loading='lazy';
+      const link=document.createElement('a');link.href=spor.url;
+      link.target='_blank';link.rel='noopener noreferrer';link.textContent='Öppna i Spotify';
+      kort.append(player,link);section.appendChild(kort);
+    });
+    operaContent.appendChild(section);
+  }
+  const biljett=biljettUrl(info.biljetter);
+  if(biljett){
+    const link=document.createElement('a');link.className='action-link opera-tickets';
+    link.href=biljett;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Boka biljetter';
+    operaContent.appendChild(link);
+  }
+}
+document.getElementById('close-dialog').addEventListener('click',()=>modal.close());
+document.querySelectorAll('[data-panel]').forEach(button=>button.addEventListener('click',()=>{
+  const panel=button.dataset.panel;
+  modal.dataset.panel=panel;
+  document.getElementById('dialog-title').textContent=titles[panel];
+  const isOpera=panel==='opera';
+  modal.querySelector('.essay-scroll').scrollTop=0;
+  message.hidden=true;
+  message.textContent='';
+  document.getElementById('opera-booking').hidden=!isOpera;
+  frame.hidden=isOpera;
+  if(isOpera){
+    if(operaHarSvar)visaOpera(aktuellOpera);
+    else operaStatus('Hämtar information om operan …');
+    if(!operaHamtar)laddaOpera();
+  }else{
+    frame.title=panel==='join'?'Anmäl dig till OperaKlubben':'OperaKlubbens deltagarlista';
+    frame.src=appUrl+(panel==='guests'?'?vy=lista':'')
+  }
+  modal.showModal();
+}));
+window.addEventListener('message',event=>{if(modal.open && !frame.hidden && /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/.test(event.origin) && event.data==='operaklubben-avbryt'){modal.close()}});
+modal.addEventListener('close',()=>{frame.removeAttribute('src');frame.hidden=true;operaContent.replaceChildren();document.querySelector('[data-panel="'+modal.dataset.panel+'"]').focus()});
+modal.addEventListener('click',event=>{if(event.target===modal){const r=modal.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)modal.close()}});
+
+const menuToggle=document.getElementById('menu-toggle');
+const menuLinks=document.getElementById('menu-links');
+const essay=document.getElementById('why-opera');
+function closeMenu(){menuLinks.hidden=true;menuToggle.setAttribute('aria-expanded','false');menuToggle.setAttribute('aria-label','Öppna meny')}
+menuToggle.addEventListener('click',()=>{const open=menuLinks.hidden;menuLinks.hidden=!open;menuToggle.setAttribute('aria-expanded',String(open));menuToggle.setAttribute('aria-label',open?'Stäng meny':'Öppna meny')});
+document.addEventListener('click',event=>{if(!event.target.closest('.site-menu'))closeMenu()});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!menuLinks.hidden){closeMenu();menuToggle.focus()}});
+document.getElementById('why-opera-link').addEventListener('click',event=>{event.preventDefault();closeMenu();essay.showModal();essay.querySelector('.essay-scroll').scrollTop=0});
+document.getElementById('essay-close').addEventListener('click',()=>essay.close());
+essay.addEventListener('close',()=>menuToggle.focus());
+essay.addEventListener('click',event=>{if(event.target===essay){const r=essay.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)essay.close()}});
+
+const aboutClub=document.getElementById('about-club');
+document.getElementById('about-club-link').addEventListener('click',event=>{event.preventDefault();closeMenu();aboutClub.showModal();aboutClub.querySelector('.essay-scroll').scrollTop=0});
+document.getElementById('about-close').addEventListener('click',()=>aboutClub.close());
+aboutClub.addEventListener('close',()=>menuToggle.focus());
+aboutClub.addEventListener('click',event=>{if(event.target===aboutClub){const r=aboutClub.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)aboutClub.close()}});
+
+['how-to','why-early','before-opera'].forEach(id=>{
+  const dialog=document.getElementById(id);
+  document.getElementById(id+'-link').addEventListener('click',event=>{
+    event.preventDefault();
+    closeMenu();
+    dialog.showModal();
+    dialog.querySelector('.essay-scroll').scrollTop=0;
+  });
+  dialog.querySelector('.essay-close').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('close',()=>menuToggle.focus());
+  dialog.addEventListener('click',event=>{
+    if(event.target!==dialog)return;
+    const r=dialog.getBoundingClientRect();
+    if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();
+  });
+});
+
+const scrollHint=document.getElementById('scroll-hint');
+const actions=document.querySelector('.actions');
+function updateScrollHint(){scrollHint.hidden=window.scrollY>32}
+scrollHint.addEventListener('click',()=>actions.parentElement.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}));
+window.addEventListener('scroll',updateScrollHint,{passive:true});
+window.addEventListener('resize',updateScrollHint);
+window.addEventListener('load',updateScrollHint);
+updateScrollHint();
+
+window.addEventListener('message',event=>{
+  if(!/^https:\/\/([a-z0-9-]+\.)*(googleusercontent\.com|script\.google\.com)$/.test(event.origin)) return;
+  const data=event.data;
+  if(data && data.request===String(operaRequest)){
+    if(data.type==='operaklubben-opera'){
+      clearTimeout(operaLoadTimer);
+      operaHamtar=false;
+      operaHarSvar=true;
+      aktuellOpera=data.opera;
+      uppdateraOperaMetadata(aktuellOpera);
+      if(modal.open && modal.dataset.panel==='opera')visaOpera(aktuellOpera);
+      return;
+    }
+    if(data.type==='operaklubben-opera-fel'){
+      clearTimeout(operaLoadTimer);
+      operaHamtar=false;
+      if(modal.open && modal.dataset.panel==='opera')operaFel();
+      return;
+    }
+  }
+  if(!modal.open || frame.hidden || !data || !Number.isSafeInteger(data.antal) || data.antal<0) return;
+  if(modal.dataset.panel==='guests' && data.type==='operaklubben-antal'){
+    document.getElementById('dialog-title').textContent='Anmälda ('+data.antal+' st)';
+  }else if(modal.dataset.panel==='join' && data.type==='operaklubben-anmalningsantal' && data.antal<=20){
+    document.getElementById('dialog-title').textContent=data.antal>=2?'Vi hakar på!':'Jag hakar på!';
+  }
+});
+laddaOpera();
+</script>
+</body>
+</html>
